@@ -147,7 +147,7 @@ CreateThread(function()
                         }
                     end
 
-                    local values = exports['atlas_core']:InputDialog(
+                    local values = lib.inputDialog(
                         'Scrap Fence',
                         {
                             { type = 'select', name = 'item', label = 'Item',     options = opts, isRequired = true },

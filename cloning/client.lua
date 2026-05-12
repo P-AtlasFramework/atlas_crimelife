@@ -43,7 +43,7 @@ RegisterNetEvent('atlas_crimelife:cl:useCloner', function(slot)
         return
     end
 
-    local values = exports['atlas_core']:InputDialog(
+    local values = lib.inputDialog(
         'Reflash Plate',
         {
             { type = 'input', name = 'plate', label = 'New plate (1-8 chars, A-Z 0-9)', isRequired = true },
