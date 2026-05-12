@@ -91,15 +91,13 @@ RegisterNetEvent('atlas_crimelife:cs:requestStrip', function(vehNetId)
     local elapsed = nowSec() - last
     if elapsed < config.cooldown then
         local wait = config.cooldown - elapsed
-        Atlas.Functions.Notify(src,
-            ('Chop shop cooling down. %dm %ds'):format(math.floor(wait / 60), wait % 60),
-            'error', 4500)
+        lib.notify(src, { description = ('Chop shop cooling down. %dm %ds'):format(math.floor(wait / 60), wait % 60), type = 'error', duration = 4500 })
         return
     end
 
     -- Already pending
     if PendingStrips[cid] then
-        Atlas.Functions.Notify(src, 'You\'re already stripping a vehicle', 'error', 3500)
+        lib.notify(src, { description = 'You\'re already stripping a vehicle', type = 'error', duration = 3500 })
         return
     end
 
@@ -107,7 +105,7 @@ RegisterNetEvent('atlas_crimelife:cs:requestStrip', function(vehNetId)
     if type(vehNetId) ~= 'number' then return end
     local vehicle = NetworkGetEntityFromNetworkId(vehNetId)
     if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then
-        Atlas.Functions.Notify(src, 'Vehicle not found', 'error', 3500)
+        lib.notify(src, { description = 'Vehicle not found', type = 'error', duration = 3500 })
         return
     end
 
@@ -119,13 +117,13 @@ RegisterNetEvent('atlas_crimelife:cs:requestStrip', function(vehNetId)
         vehClass = GetVehicleClass(vehicle)
     end
     if config.excludedClasses[vehClass] then
-        Atlas.Functions.Notify(src, 'That vehicle can\'t be stripped here', 'error', 3500)
+        lib.notify(src, { description = 'That vehicle can\'t be stripped here', type = 'error', duration = 3500 })
         return
     end
 
     -- Zone check
     if not isInZone(src, vehicle) then
-        Atlas.Functions.Notify(src, 'Vehicle must be inside the chop shop', 'error', 3500)
+        lib.notify(src, { description = 'Vehicle must be inside the chop shop', type = 'error', duration = 3500 })
         return
     end
 
@@ -140,7 +138,7 @@ RegisterNetEvent('atlas_crimelife:cs:requestStrip', function(vehNetId)
     -- VIN has been scratched.
     local ownerCid = getVehicleOwner(plate)
     if not scratched and ownerCid and ownerCid == cid then
-        Atlas.Functions.Notify(src, 'Can\'t chop your own vehicle', 'error', 4000)
+        lib.notify(src, { description = 'Can\'t chop your own vehicle', type = 'error', duration = 4000 })
         return
     end
 
@@ -163,7 +161,7 @@ RegisterNetEvent('atlas_crimelife:cs:requestStripComplete', function()
 
     local pending = PendingStrips[cid]
     if not pending then
-        Atlas.Functions.Notify(src, 'No active strip', 'error', 3000)
+        lib.notify(src, { description = 'No active strip', type = 'error', duration = 3000 })
         return
     end
 
@@ -181,7 +179,7 @@ RegisterNetEvent('atlas_crimelife:cs:requestStripComplete', function()
     if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then
         PendingStrips[cid] = nil
         logRun(cid, 'failed', { reason = 'vehicle-gone', plate = pending.plate })
-        Atlas.Functions.Notify(src, 'Vehicle gone — strip cancelled', 'error', 3500)
+        lib.notify(src, { description = 'Vehicle gone — strip cancelled', type = 'error', duration = 3500 })
         return
     end
 
@@ -189,7 +187,7 @@ RegisterNetEvent('atlas_crimelife:cs:requestStripComplete', function()
     if not isInZone(src, vehicle) then
         PendingStrips[cid] = nil
         logRun(cid, 'failed', { reason = 'zone-exit', plate = pending.plate })
-        Atlas.Functions.Notify(src, 'Vehicle left the chop shop', 'error', 3500)
+        lib.notify(src, { description = 'Vehicle left the chop shop', type = 'error', duration = 3500 })
         return
     end
 
@@ -247,7 +245,7 @@ RegisterNetEvent('atlas_crimelife:cs:requestStripComplete', function()
     local summary = ('+ %d XP'):format(config.crimeXp)
     if bonus > 0 then summary = summary .. (' / +$%d marked'):format(bonus) end
     if pending.scratched then summary = summary .. ' / scratched bonus' end
-    Atlas.Functions.Notify(src, ('Stripped — %s'):format(summary), 'success', 5000)
+    lib.notify(src, { description = ('Stripped — %s'):format(summary), type = 'success', duration = 5000 })
     TriggerClientEvent('atlas_crimelife:cs:stripDone', src)
 end)
 

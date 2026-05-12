@@ -64,39 +64,39 @@ RegisterNetEvent('atlas_crimelife:cl:requestClone', function(vehNetId, newPlate,
     if not cid then return end
 
     if Pending[cid] then
-        Atlas.Functions.Notify(src, 'Already cloning a plate', 'error', 3000)
+        lib.notify(src, { description = 'Already cloning a plate', type = 'error', duration = 3000 })
         return
     end
 
     if type(vehNetId) ~= 'number' then return end
     local vehicle = NetworkGetEntityFromNetworkId(vehNetId)
     if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then
-        Atlas.Functions.Notify(src, 'Vehicle not found', 'error', 3000)
+        lib.notify(src, { description = 'Vehicle not found', type = 'error', duration = 3000 })
         return
     end
 
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     local vCoords = GetEntityCoords(vehicle)
     if #(pCoords - vCoords) > config.maxDistance + 1.0 then
-        Atlas.Functions.Notify(src, 'Get closer to the vehicle', 'error', 3000)
+        lib.notify(src, { description = 'Get closer to the vehicle', type = 'error', duration = 3000 })
         return
     end
 
     local cleaned = cleanPlate(newPlate)
     if not validPlateFormat(cleaned) then
-        Atlas.Functions.Notify(src, 'Bad plate format (1-8 chars, A-Z 0-9)', 'error', 4000)
+        lib.notify(src, { description = 'Bad plate format (1-8 chars, A-Z 0-9)', type = 'error', duration = 4000 })
         return
     end
 
     if isPlateOwned(cleaned) then
-        Atlas.Functions.Notify(src, 'That plate is already on someone\'s registry', 'error', 4000)
+        lib.notify(src, { description = 'That plate is already on someone\'s registry', type = 'error', duration = 4000 })
         return
     end
 
     local hasItem = false
     pcall(function() hasItem = exports['atlas_inv']:HasItem(src, config.item, 1) end)
     if not hasItem then
-        Atlas.Functions.Notify(src, 'No cloner kit', 'error', 3000)
+        lib.notify(src, { description = 'No cloner kit', type = 'error', duration = 3000 })
         return
     end
 
@@ -129,7 +129,7 @@ RegisterNetEvent('atlas_crimelife:cl:complete', function()
     local vehicle = NetworkGetEntityFromNetworkId(pending.netId)
     if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then
         Pending[cid] = nil
-        Atlas.Functions.Notify(src, 'Vehicle gone', 'error', 3000)
+        lib.notify(src, { description = 'Vehicle gone', type = 'error', duration = 3000 })
         return
     end
 
@@ -137,7 +137,7 @@ RegisterNetEvent('atlas_crimelife:cl:complete', function()
     local vCoords = GetEntityCoords(vehicle)
     if #(pCoords - vCoords) > config.maxDistance + 1.5 then
         Pending[cid] = nil
-        Atlas.Functions.Notify(src, 'You moved too far away', 'error', 3000)
+        lib.notify(src, { description = 'You moved too far away', type = 'error', duration = 3000 })
         return
     end
 
@@ -145,7 +145,7 @@ RegisterNetEvent('atlas_crimelife:cl:complete', function()
     -- was holding the bar. Rare, but cheap to check.
     if isPlateOwned(pending.newPlate) then
         Pending[cid] = nil
-        Atlas.Functions.Notify(src, 'Plate registered while you worked — voided', 'error', 4000)
+        lib.notify(src, { description = 'Plate registered while you worked — voided', type = 'error', duration = 4000 })
         return
     end
 
@@ -191,9 +191,7 @@ RegisterNetEvent('atlas_crimelife:cl:complete', function()
     StreetCred.AddXp(src, config.crimeXp)
     Pending[cid] = nil
 
-    Atlas.Functions.Notify(src,
-        ('Plate cloned to %s — +%d XP'):format(pending.newPlate, config.crimeXp),
-        'success', 5500)
+    lib.notify(src, { description = ('Plate cloned to %s — +%d XP'):format(pending.newPlate, config.crimeXp), type = 'success', duration = 5500 })
 end)
 
 RegisterNetEvent('atlas_crimelife:cl:cancel', function()

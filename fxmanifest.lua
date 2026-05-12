@@ -9,6 +9,7 @@ version '0.1.0'
 
 -- Shared layer (loaded into both client + server contexts).
 shared_scripts {
+    '@ox_lib/init.lua',
     'config.lua',
     'shared/streetcred.lua',
     'shared/perms.lua',

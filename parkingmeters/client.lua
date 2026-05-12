@@ -106,6 +106,6 @@ RegisterNetEvent('atlas_crimelife:pm:start', function(toolKey, durationMs)
         TriggerServerEvent('atlas_crimelife:pm:complete')
     else
         TriggerServerEvent('atlas_crimelife:pm:cancel')
-        Atlas.Functions.Notify('Cancelled', 'primary', 2500)
+        lib.notify({ description = 'Cancelled', type = 'info', duration = 2500 })
     end
 end)

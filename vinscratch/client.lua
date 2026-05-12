@@ -32,18 +32,18 @@ end
 
 RegisterNetEvent('atlas_crimelife:vs:useKit', function(slot)
     if scrubbing then
-        Atlas.Functions.Notify('You\'re already scrubbing one', 'error', 3000)
+        lib.notify({ description = 'You\'re already scrubbing one', type = 'error', duration = 3000 })
         return
     end
     -- Don't allow inside a vehicle — feels wrong, and it confuses the
     -- "stand next to the car you're scrubbing" mental model.
     if IsPedInAnyVehicle(PlayerPedId(), false) then
-        Atlas.Functions.Notify('Step out first', 'error', 3000)
+        lib.notify({ description = 'Step out first', type = 'error', duration = 3000 })
         return
     end
     local veh, netId = findNearestVehicle()
     if not veh or not netId then
-        Atlas.Functions.Notify('No vehicle in range', 'error', 3000)
+        lib.notify({ description = 'No vehicle in range', type = 'error', duration = 3000 })
         return
     end
     TriggerServerEvent('atlas_crimelife:vs:requestScrub', netId, slot)
@@ -65,6 +65,6 @@ RegisterNetEvent('atlas_crimelife:vs:start', function(durationMs)
         TriggerServerEvent('atlas_crimelife:vs:complete')
     else
         TriggerServerEvent('atlas_crimelife:vs:cancel')
-        Atlas.Functions.Notify('Scrub cancelled', 'primary', 3000)
+        lib.notify({ description = 'Scrub cancelled', type = 'info', duration = 3000 })
     end
 end)

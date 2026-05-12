@@ -30,16 +30,16 @@ end
 
 RegisterNetEvent('atlas_crimelife:cl:useCloner', function(slot)
     if cloning then
-        Atlas.Functions.Notify('Already cloning a plate', 'error', 3000)
+        lib.notify({ description = 'Already cloning a plate', type = 'error', duration = 3000 })
         return
     end
     if IsPedInAnyVehicle(PlayerPedId(), false) then
-        Atlas.Functions.Notify('Step out first', 'error', 3000)
+        lib.notify({ description = 'Step out first', type = 'error', duration = 3000 })
         return
     end
     local veh, netId = findNearestVehicle()
     if not veh or not netId then
-        Atlas.Functions.Notify('No vehicle in range', 'error', 3000)
+        lib.notify({ description = 'No vehicle in range', type = 'error', duration = 3000 })
         return
     end
 
@@ -50,12 +50,12 @@ RegisterNetEvent('atlas_crimelife:cl:useCloner', function(slot)
         }
     )
     if not values then
-        Atlas.Functions.Notify('Cancelled', 'primary', 2500)
+        lib.notify({ description = 'Cancelled', type = 'info', duration = 2500 })
         return
     end
     local newPlate = cleanInputPlate(values[1])
     if newPlate == '' or #newPlate > config.plateMaxLen then
-        Atlas.Functions.Notify('Bad plate', 'error', 3000)
+        lib.notify({ description = 'Bad plate', type = 'error', duration = 3000 })
         return
     end
 
@@ -78,6 +78,6 @@ RegisterNetEvent('atlas_crimelife:cl:start', function(durationMs)
         TriggerServerEvent('atlas_crimelife:cl:complete')
     else
         TriggerServerEvent('atlas_crimelife:cl:cancel')
-        Atlas.Functions.Notify('Clone cancelled', 'primary', 3000)
+        lib.notify({ description = 'Clone cancelled', type = 'info', duration = 3000 })
     end
 end)

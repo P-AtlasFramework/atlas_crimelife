@@ -158,7 +158,7 @@ CreateThread(function()
                     local item = values[1]
                     local qty  = tonumber(values[2]) or 0
                     if not item or qty <= 0 then
-                        Atlas.Functions.Notify('Bad quantity', 'error')
+                        lib.notify({ description = 'Bad quantity', type = 'error' })
                         return
                     end
                     TriggerServerEvent('atlas_crimelife:cps:fenceSell', item, qty)

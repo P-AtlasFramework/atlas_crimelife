@@ -81,7 +81,7 @@ RegisterNetEvent('atlas_crimelife:cs:stripStart', function(durationMs)
     if ok then
         TriggerServerEvent('atlas_crimelife:cs:requestStripComplete')
     else
-        Atlas.Functions.Notify('Strip cancelled', 'primary', 3000)
+        lib.notify({ description = 'Strip cancelled', type = 'info', duration = 3000 })
         stripping = false
     end
 end)
