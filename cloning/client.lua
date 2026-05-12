@@ -66,7 +66,7 @@ RegisterNetEvent('atlas_crimelife:cl:start', function(durationMs)
     if cloning then return end
     cloning = true
 
-    local ok = exports['atlas_core']:CircleProgressBar({
+    local ok = lib.progressCircle({
         label    = 'Reflashing plate…',
         duration = durationMs,
         anim     = config.anim,

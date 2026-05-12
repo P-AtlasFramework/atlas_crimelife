@@ -71,7 +71,7 @@ RegisterNetEvent('atlas_crimelife:cs:stripStart', function(durationMs)
         Wait(2000)
     end
 
-    local ok = exports['atlas_core']:CircleProgressBar({
+    local ok = lib.progressCircle({
         label    = 'Stripping vehicle…',
         duration = durationMs,
         anim     = config.stripAnim,

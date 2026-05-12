@@ -94,7 +94,7 @@ RegisterNetEvent('atlas_crimelife:pm:start', function(toolKey, durationMs)
             'WEB_NAVIGATION_SOUNDS_PHONE', false, 0, false)
     end
 
-    local ok = exports['atlas_core']:CircleProgressBar({
+    local ok = lib.progressCircle({
         label    = tool.label,
         duration = durationMs,
         anim     = tool.anim,

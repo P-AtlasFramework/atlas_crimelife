@@ -53,7 +53,7 @@ RegisterNetEvent('atlas_crimelife:vs:start', function(durationMs)
     if scrubbing then return end
     scrubbing = true
 
-    local ok = exports['atlas_core']:CircleProgressBar({
+    local ok = lib.progressCircle({
         label    = 'Scrubbing VIN…',
         duration = durationMs,
         anim     = config.anim,
