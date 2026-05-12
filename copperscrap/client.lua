@@ -68,7 +68,7 @@ RegisterNetEvent('atlas_crimelife:cps:start', function()
 
     local success = false
     pcall(function()
-        success = exports['atlas_core']:SkillCheck(
+        success = lib.skillCheck(
             config.skillCheck.difficulty,
             config.skillCheck.inputs
         )
