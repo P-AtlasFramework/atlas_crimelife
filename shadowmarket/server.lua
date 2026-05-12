@@ -84,13 +84,13 @@ RegisterNetEvent('atlas_crimelife:sm:requestPickup', function(handlerIdx)
     local elapsed = nowSec() - last
     if elapsed < config.cooldown then
         local wait = config.cooldown - elapsed
-        lib.notify(src, { description = ('Come back in %dm %ds'):format(math.floor(wait / 60), wait % 60), type = 'error', duration = 4000 })
+        lib.notify({ source = src, description = ('Come back in %dm %ds'):format(math.floor(wait / 60), wait % 60), type = 'error', duration = 4000 })
         return
     end
 
     -- Already on a run — no double-dipping
     if ActiveRuns[cid] then
-        lib.notify(src, { description = 'You\'re already moving a package', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'You\'re already moving a package', type = 'error', duration = 3500 })
         return
     end
 
@@ -98,14 +98,14 @@ RegisterNetEvent('atlas_crimelife:sm:requestPickup', function(handlerIdx)
     local hasItem = false
     pcall(function() hasItem = exports['atlas_inv']:CanCarry(src, config.package, 1) end)
     if hasItem == false then
-        lib.notify(src, { description = 'Not enough room in your bag', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Not enough room in your bag', type = 'error', duration = 3500 })
         return
     end
 
     local addOk = false
     pcall(function() addOk = exports['atlas_inv']:AddItem(src, config.package, 1, nil, nil, 'shadowmarket:pickup') end)
     if not addOk then
-        lib.notify(src, { description = 'Couldn\'t take the package', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Couldn\'t take the package', type = 'error', duration = 3500 })
         return
     end
 
@@ -113,7 +113,7 @@ RegisterNetEvent('atlas_crimelife:sm:requestPickup', function(handlerIdx)
     if not dropIdx then
         -- Fallback: refund the item, abort.
         pcall(function() exports['atlas_inv']:RemoveItem(src, config.package, 1, nil, 'shadowmarket:pickup-rollback') end)
-        lib.notify(src, { description = 'No buyer available right now', type = 'error', duration = 4000 })
+        lib.notify({ source = src, description = 'No buyer available right now', type = 'error', duration = 4000 })
         return
     end
 
@@ -126,7 +126,7 @@ RegisterNetEvent('atlas_crimelife:sm:requestPickup', function(handlerIdx)
     logRun(cid, 'started', { handlerIdx = handlerIdx, dropIdx = dropIdx })
 
     TriggerClientEvent('atlas_crimelife:sm:pickupAck', src, dropIdx, config.drops[dropIdx])
-    lib.notify(src, { description = 'Drop the package at the marker', type = 'info', duration = 5000 })
+    lib.notify({ source = src, description = 'Drop the package at the marker', type = 'info', duration = 5000 })
 end)
 
 -- Client confirms dropoff at drop ped `dropIdx`.
@@ -137,12 +137,12 @@ RegisterNetEvent('atlas_crimelife:sm:requestDropoff', function(dropIdx)
 
     local run = ActiveRuns[cid]
     if not run then
-        lib.notify(src, { description = 'You don\'t have a package to drop', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'You don\'t have a package to drop', type = 'error', duration = 3500 })
         return
     end
 
     if type(dropIdx) ~= 'number' or dropIdx ~= run.dropIdx then
-        lib.notify(src, { description = 'Wrong buyer — find the right one', type = 'error', duration = 4000 })
+        lib.notify({ source = src, description = 'Wrong buyer — find the right one', type = 'error', duration = 4000 })
         return
     end
 
@@ -152,7 +152,7 @@ RegisterNetEvent('atlas_crimelife:sm:requestDropoff', function(dropIdx)
     local drop = config.drops[dropIdx]
     local dropCoords = vec3(drop.coords.x, drop.coords.y, drop.coords.z)
     if #(pedCoords - dropCoords) > 8.0 then
-        lib.notify(src, { description = 'Get closer to the buyer', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Get closer to the buyer', type = 'error', duration = 3500 })
         return
     end
 
@@ -160,7 +160,7 @@ RegisterNetEvent('atlas_crimelife:sm:requestDropoff', function(dropIdx)
     local hasPkg = false
     pcall(function() hasPkg = exports['atlas_inv']:HasItem(src, config.package, 1) end)
     if not hasPkg then
-        lib.notify(src, { description = 'You don\'t have the package', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'You don\'t have the package', type = 'error', duration = 3500 })
         ActiveRuns[cid] = nil
         return
     end
@@ -168,7 +168,7 @@ RegisterNetEvent('atlas_crimelife:sm:requestDropoff', function(dropIdx)
     local removed = false
     pcall(function() removed = exports['atlas_inv']:RemoveItem(src, config.package, 1, nil, 'shadowmarket:dropoff') end)
     if not removed then
-        lib.notify(src, { description = 'Failed to hand over the package', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Failed to hand over the package', type = 'error', duration = 3500 })
         return
     end
 
@@ -182,7 +182,7 @@ RegisterNetEvent('atlas_crimelife:sm:requestDropoff', function(dropIdx)
 
     logRun(cid, 'completed', { handlerIdx = run.handlerIdx, dropIdx = dropIdx, pay = pay })
 
-    lib.notify(src, { description = ('Run complete — $%d marked bills + %d XP'):format(pay, config.payout.crimeXp), type = 'success', duration = 5000 })
+    lib.notify({ source = src, description = ('Run complete — $%d marked bills + %d XP'):format(pay, config.payout.crimeXp), type = 'success', duration = 5000 })
     TriggerClientEvent('atlas_crimelife:sm:runEnded', src)
 end)
 

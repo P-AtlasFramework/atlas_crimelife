@@ -96,14 +96,14 @@ RegisterNetEvent('atlas_crimelife:vs:requestScrub', function(vehNetId, slot)
     if not cid then return end
 
     if Pending[cid] then
-        lib.notify(src, { description = 'You\'re already scrubbing one', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'You\'re already scrubbing one', type = 'error', duration = 3000 })
         return
     end
 
     if type(vehNetId) ~= 'number' then return end
     local vehicle = NetworkGetEntityFromNetworkId(vehNetId)
     if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then
-        lib.notify(src, { description = 'Vehicle not found', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Vehicle not found', type = 'error', duration = 3000 })
         return
     end
 
@@ -111,14 +111,14 @@ RegisterNetEvent('atlas_crimelife:vs:requestScrub', function(vehNetId, slot)
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     local vCoords = GetEntityCoords(vehicle)
     if #(pCoords - vCoords) > config.maxDistance + 1.0 then
-        lib.notify(src, { description = 'Get closer to the vehicle', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Get closer to the vehicle', type = 'error', duration = 3000 })
         return
     end
 
     local plate = cleanPlate(GetVehicleNumberPlateText(vehicle))
     if plate == '' then return end
     if Scratched[plate] then
-        lib.notify(src, { description = 'This plate has already been scrubbed', type = 'info', duration = 3500 })
+        lib.notify({ source = src, description = 'This plate has already been scrubbed', type = 'info', duration = 3500 })
         return
     end
 
@@ -126,7 +126,7 @@ RegisterNetEvent('atlas_crimelife:vs:requestScrub', function(vehNetId, slot)
     local hasKit = false
     pcall(function() hasKit = exports['atlas_inv']:HasItem(src, config.item, 1) end)
     if not hasKit then
-        lib.notify(src, { description = 'No scrubbing kit', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'No scrubbing kit', type = 'error', duration = 3000 })
         return
     end
 
@@ -158,7 +158,7 @@ RegisterNetEvent('atlas_crimelife:vs:complete', function()
     local vehicle = NetworkGetEntityFromNetworkId(pending.netId)
     if not vehicle or vehicle == 0 or not DoesEntityExist(vehicle) then
         Pending[cid] = nil
-        lib.notify(src, { description = 'Vehicle gone', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Vehicle gone', type = 'error', duration = 3000 })
         return
     end
 
@@ -167,7 +167,7 @@ RegisterNetEvent('atlas_crimelife:vs:complete', function()
     local vCoords = GetEntityCoords(vehicle)
     if #(pCoords - vCoords) > config.maxDistance + 1.5 then
         Pending[cid] = nil
-        lib.notify(src, { description = 'You moved too far away', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'You moved too far away', type = 'error', duration = 3000 })
         return
     end
 
@@ -175,7 +175,7 @@ RegisterNetEvent('atlas_crimelife:vs:complete', function()
     local plate = cleanPlate(GetVehicleNumberPlateText(vehicle))
     if plate ~= pending.plate then
         Pending[cid] = nil
-        lib.notify(src, { description = 'Plate changed mid-scrub — voided', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Plate changed mid-scrub — voided', type = 'error', duration = 3500 })
         return
     end
 
@@ -203,7 +203,7 @@ RegisterNetEvent('atlas_crimelife:vs:complete', function()
         })
     end)
 
-    lib.notify(src, { description = ('Plate %s scrubbed — +%d XP'):format(plate, config.crimeXp), type = 'success', duration = 5000 })
+    lib.notify({ source = src, description = ('Plate %s scrubbed — +%d XP'):format(plate, config.crimeXp), type = 'success', duration = 5000 })
 end)
 
 RegisterNetEvent('atlas_crimelife:vs:cancel', function()
@@ -245,6 +245,6 @@ Atlas.Commands.Add('clearvin', 'Admin: clear scratched flag on a plate',
         if plate == '' then return end
         Scratched[plate] = nil
         pcall(function() MongoDB.Game.deleteOne('vin_scratched', { plate = plate }) end)
-        lib.notify(source, { description = ('Cleared scratched flag on %s'):format(plate), type = 'success' })
+        lib.notify({ source = source, description = ('Cleared scratched flag on %s'):format(plate), type = 'success' })
     end, 'admin'
 )

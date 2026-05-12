@@ -69,30 +69,30 @@ RegisterNetEvent('atlas_crimelife:cps:requestStrip', function(groupKey, propCoor
     local key = coordKey(coords)
 
     if Pending[cid] then
-        lib.notify(src, { description = 'Already on a job', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Already on a job', type = 'error', duration = 3000 })
         return
     end
 
     if nowSec() - (PlayerCooldowns[cid] or 0) < config.perPlayerCooldownSec then
-        lib.notify(src, { description = 'Slow down', type = 'error', duration = 2500 })
+        lib.notify({ source = src, description = 'Slow down', type = 'error', duration = 2500 })
         return
     end
 
     if nowSec() - (PropCooldowns[key] or 0) < config.perPropCooldownSec then
-        lib.notify(src, { description = 'This one\'s already been stripped', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'This one\'s already been stripped', type = 'error', duration = 3500 })
         return
     end
 
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     if #(pCoords - coords) > 3.5 then
-        lib.notify(src, { description = 'Get closer', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Get closer', type = 'error', duration = 3000 })
         return
     end
 
     local hasItem = false
     pcall(function() hasItem = exports['atlas_inv']:HasItem(src, config.tool.item, 1) end)
     if not hasItem then
-        lib.notify(src, { description = 'Need wire cutters', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Need wire cutters', type = 'error', duration = 3500 })
         return
     end
 
@@ -122,7 +122,7 @@ RegisterNetEvent('atlas_crimelife:cps:complete', function(success)
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     if #(pCoords - pending.coords) > 4.5 then
         Pending[cid] = nil
-        lib.notify(src, { description = 'You moved off it', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'You moved off it', type = 'error', duration = 3000 })
         return
     end
 
@@ -169,7 +169,7 @@ RegisterNetEvent('atlas_crimelife:cps:complete', function(success)
 
         local parts = {}
         for k, v in pairs(awarded) do parts[#parts + 1] = ('+%d %s'):format(v, k) end
-        lib.notify(src, { description = (#parts > 0 and table.concat(parts, ' / ') or 'No usable scrap') ..
+        lib.notify({ source = src, description = (#parts > 0 and table.concat(parts, ' / ') or 'No usable scrap') ..
                 (' / +%d XP'):format(config.crimeXp), type = 'success', duration = 4500 })
     else
         -- Failed skillcheck: shock the player and maybe break the tool.
@@ -179,9 +179,9 @@ RegisterNetEvent('atlas_crimelife:cps:complete', function(success)
 
         if math.random() < (config.tool.breakChance or 0) then
             pcall(function() exports['atlas_inv']:RemoveItem(src, config.tool.item, 1, nil, 'copperscrap:break') end)
-            lib.notify(src, { description = 'Got shocked — cutters fried', type = 'error', duration = 4500 })
+            lib.notify({ source = src, description = 'Got shocked — cutters fried', type = 'error', duration = 4500 })
         else
-            lib.notify(src, { description = 'Got shocked — try again', type = 'error', duration = 4000 })
+            lib.notify({ source = src, description = 'Got shocked — try again', type = 'error', duration = 4000 })
         end
 
         bumpHeat(pending.coords, config.heatGainFailure)
@@ -208,7 +208,7 @@ RegisterNetEvent('atlas_crimelife:cps:fenceSell', function(itemName, qty)
 
     qty = tonumber(qty) or 0
     if qty <= 0 or qty > config.fence.batchMax then
-        lib.notify(src, { description = ('Sell 1-%d at a time'):format(config.fence.batchMax), type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = ('Sell 1-%d at a time'):format(config.fence.batchMax), type = 'error', duration = 3500 })
         return
     end
 
@@ -216,27 +216,27 @@ RegisterNetEvent('atlas_crimelife:cps:fenceSell', function(itemName, qty)
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     local fc = config.fence.coords
     if #(pCoords - vec3(fc.x, fc.y, fc.z)) > 4.0 then
-        lib.notify(src, { description = 'Get to the fence', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Get to the fence', type = 'error', duration = 3000 })
         return
     end
 
     -- Cooldown
     if nowSec() - (FenceCooldowns[cid] or 0) < config.fence.sellCooldownSec then
-        lib.notify(src, { description = 'Hold up — already counted last batch', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Hold up — already counted last batch', type = 'error', duration = 3500 })
         return
     end
 
     local has = false
     pcall(function() has = exports['atlas_inv']:HasItem(src, itemName, qty) end)
     if not has then
-        lib.notify(src, { description = ('Don\'t have %d %s'):format(qty, itemName), type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = ('Don\'t have %d %s'):format(qty, itemName), type = 'error', duration = 3500 })
         return
     end
 
     local removed = false
     pcall(function() removed = exports['atlas_inv']:RemoveItem(src, itemName, qty, nil, 'copperscrap:fence') end)
     if not removed then
-        lib.notify(src, { description = 'Failed to take the materials', type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Failed to take the materials', type = 'error', duration = 3500 })
         return
     end
 
@@ -247,7 +247,7 @@ RegisterNetEvent('atlas_crimelife:cps:fenceSell', function(itemName, qty)
     FenceCooldowns[cid] = nowSec()
     logRun(cid, 'fence', { item = itemName, qty = qty, pay = pay })
 
-    lib.notify(src, { description = ('Sold %d %s for $%d marked'):format(qty, itemName, pay), type = 'success', duration = 4500 })
+    lib.notify({ source = src, description = ('Sold %d %s for $%d marked'):format(qty, itemName, pay), type = 'success', duration = 4500 })
 end)
 
 -- ─── Cleanup ─────────────────────────────────────────────────────

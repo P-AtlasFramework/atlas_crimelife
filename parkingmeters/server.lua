@@ -123,20 +123,20 @@ RegisterNetEvent('atlas_crimelife:pm:requestSmash', function(toolKey, propCoords
     -- Player throttle
     local lastP = PlayerCooldowns[cid] or 0
     if nowSec() - lastP < config.perPlayerCooldownSec then
-        lib.notify(src, { description = 'Slow down', type = 'error', duration = 2500 })
+        lib.notify({ source = src, description = 'Slow down', type = 'error', duration = 2500 })
         return
     end
 
     -- Per-prop cooldown
     local lastProp = PropCooldowns[key] or 0
     if nowSec() - lastProp < config.perPropCooldownSec then
-        lib.notify(src, { description = 'This one\'s already empty', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'This one\'s already empty', type = 'error', duration = 3000 })
         return
     end
 
     -- Already pending
     if Pending[cid] then
-        lib.notify(src, { description = 'You\'re already on one', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'You\'re already on one', type = 'error', duration = 3000 })
         return
     end
 
@@ -144,7 +144,7 @@ RegisterNetEvent('atlas_crimelife:pm:requestSmash', function(toolKey, propCoords
     local has = false
     pcall(function() has = exports['atlas_inv']:HasItem(src, tool.item, 1) end)
     if not has then
-        lib.notify(src, { description = 'Need a ' .. tool.item, type = 'error', duration = 3500 })
+        lib.notify({ source = src, description = 'Need a ' .. tool.item, type = 'error', duration = 3500 })
         return
     end
 
@@ -152,7 +152,7 @@ RegisterNetEvent('atlas_crimelife:pm:requestSmash', function(toolKey, propCoords
     if tool.rankMin and tool.rankMin > 0 then
         local rank = StreetCred.GetRank(src)
         if rank < tool.rankMin then
-            lib.notify(src, { description = ('Distributor only — need crime rank %d'):format(tool.rankMin), type = 'error', duration = 4000 })
+            lib.notify({ source = src, description = ('Distributor only — need crime rank %d'):format(tool.rankMin), type = 'error', duration = 4000 })
             return
         end
     end
@@ -160,7 +160,7 @@ RegisterNetEvent('atlas_crimelife:pm:requestSmash', function(toolKey, propCoords
     -- Distance check (anti-spoof)
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     if #(pCoords - coords) > 3.5 then
-        lib.notify(src, { description = 'Get closer', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'Get closer', type = 'error', duration = 3000 })
         return
     end
 
@@ -195,7 +195,7 @@ RegisterNetEvent('atlas_crimelife:pm:complete', function()
     local pCoords = GetEntityCoords(GetPlayerPed(src))
     if #(pCoords - pending.coords) > 4.0 then
         Pending[cid] = nil
-        lib.notify(src, { description = 'You moved off it', type = 'error', duration = 3000 })
+        lib.notify({ source = src, description = 'You moved off it', type = 'error', duration = 3000 })
         return
     end
     if nowSec() - (PropCooldowns[pending.key] or 0) < config.perPropCooldownSec then
@@ -240,7 +240,7 @@ RegisterNetEvent('atlas_crimelife:pm:complete', function()
         payout = payout,
     })
 
-    lib.notify(src, { description = bonus
+    lib.notify({ source = src, description = bonus
             and ('+$%d marked (home turf) / +%d XP'):format(payout, config.crimeXp)
             or  ('+$%d marked / +%d XP'):format(payout, config.crimeXp), type = 'success', duration = 4000 })
 end)
@@ -316,7 +316,7 @@ Atlas.Commands.Add('heatmap', 'Admin: dump current zone heat',
         for _, z in ipairs(config.zones) do
             lines[#lines + 1] = ('%-14s %5.1f'):format(z.label, decayedHeat(z.id))
         end
-        lib.notify(source, { description = 'Heat:\n' .. table.concat(lines, '\n'), type = 'info', duration = 8000 })
+        lib.notify({ source = source, description = 'Heat:\n' .. table.concat(lines, '\n'), type = 'info', duration = 8000 })
     end,
     'admin'
 )
