@@ -24,7 +24,7 @@ CopperScrap.Config = {
             -- Rooftop / wall-mounted AC props. Rockstar's naming is
             -- `prop_aircon_*` (one word) — the previous list used
             -- `prop_air_con_*` which doesn't exist in the game and silently
-            -- failed at CreateObject / atlas_target model registration.
+            -- failed at CreateObject / ox_target model registration.
             -- Small variants only ship with a/b suffix; large variants are
             -- bare-numbered.
             models = {

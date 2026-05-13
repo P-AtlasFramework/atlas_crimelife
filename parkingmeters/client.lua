@@ -1,7 +1,7 @@
 -- atlas_crimelife / parkingmeters — client.
 --
--- Registers atlas_target options on every parking meter / phonebox prop
--- in the world (atlas_target:AddTargetModel does the proximity matching
+-- Registers ox_target options on every parking meter / phonebox prop
+-- in the world (ox_target:AddTargetModel does the proximity matching
 -- for us). Each tool gets its own option so the player chooses crowbar
 -- vs master_key from the radial.
 
@@ -28,9 +28,9 @@ local function isWeaponEquipped(weaponName)
     return current == joaat(weaponName)
 end
 
--- ─── atlas_target wiring ─────────────────────────────────────────
+-- ─── ox_target wiring ─────────────────────────────────────────
 
--- Build one atlas_target option per tool. canInteract gates on:
+-- Build one ox_target option per tool. canInteract gates on:
 --   • not already busy
 --   • not seated in a vehicle
 --   • the tool is available (equipped if requireEquipped, else carried)

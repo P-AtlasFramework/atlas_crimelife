@@ -1,6 +1,6 @@
 -- atlas_crimelife / copperscrap — client.
 --
--- Two atlas_target hooks: one per prop group (AC vs electrical box).
+-- Two ox_target hooks: one per prop group (AC vs electrical box).
 -- Plus a scrapyard fence ped at the LS junkyard with its own InputDialog
 -- prompts for selling.
 
@@ -15,7 +15,7 @@ local function localHasItem(item)
     return has == true
 end
 
--- ─── atlas_target wiring (props) ─────────────────────────────────
+-- ─── ox_target wiring (props) ─────────────────────────────────
 
 CreateThread(function()
     while GetResourceState('ox_target') ~= 'started' do Wait(250) end
@@ -129,7 +129,7 @@ CreateThread(function()
     AddTextComponentString(config.fence.label)
     EndTextCommandSetBlipName(blip)
 
-    -- atlas_target option on the fence (entity, options[]) positional.
+    -- ox_target option on the fence (entity, options[]) positional.
     pcall(function()
         exports.ox_target:addLocalEntity(fencePed, {
             {

@@ -5,7 +5,7 @@
 ParkingMeters = ParkingMeters or {}
 
 ParkingMeters.Config = {
-    -- World-prop models we attach atlas_target options to. Anything in
+    -- World-prop models we attach ox_target options to. Anything in
     -- these lists triggers the radial. Parking meters are concentrated
     -- in business districts; phone boxes are scattered everywhere.
     targetModels = {

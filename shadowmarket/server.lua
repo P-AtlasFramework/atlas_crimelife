@@ -1,7 +1,7 @@
 -- atlas_crimelife / shadowmarket — server.
 --
 -- Phase 1 mule loop:
---   1. Player approaches a handler ped → atlas_target option fires
+--   1. Player approaches a handler ped → ox_target option fires
 --      `atlas_crimelife:sm:requestPickup`.
 --   2. Server validates: not on cooldown, not already on a run, has
 --      inventory space. Selects a random drop ped (filtered by
@@ -9,7 +9,7 @@
 --   3. Server gives the player a `contraband_smallpkg` item and stores
 --      `ActiveRuns[citizenid] = { handlerIdx, dropIdx, startedAt }`.
 --      Returns the drop coords + ped index to the client.
---   4. Player walks/drives to the drop ped → atlas_target on the drop
+--   4. Player walks/drives to the drop ped → ox_target on the drop
 --      ped fires `atlas_crimelife:sm:requestDropoff` with the ped index.
 --   5. Server validates the ped index matches the active run, removes
 --      the package, pays markedbills + crime XP, audits, clears state.

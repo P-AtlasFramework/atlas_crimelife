@@ -1,7 +1,7 @@
 -- atlas_crimelife / shadowmarket — client.
 --
 -- Spawns the handler peds and (lazily) the drop peds when a run starts.
--- atlas_target options on each ped drive the loop. Marker + waypoint
+-- ox_target options on each ped drive the loop. Marker + waypoint
 -- on the drop site so the player can find it.
 
 local Atlas = exports['atlas_core']:GetCoreObject()
@@ -63,7 +63,7 @@ local function despawnDrop(idx)
     dropEntities[idx] = nil
 end
 
--- ─── atlas_target wiring ─────────────────────────────────────────
+-- ─── ox_target wiring ─────────────────────────────────────────
 
 CreateThread(function()
     while GetResourceState('ox_target') ~= 'started' do Wait(250) end

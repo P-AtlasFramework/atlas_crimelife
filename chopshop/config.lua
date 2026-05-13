@@ -14,7 +14,7 @@ ChopShop.Config = {
     stripDurationMs = 30000,    -- 30 seconds
 
     -- The chop shop zone — drive a stolen vehicle into the marker, then
-    -- atlas_target on the vehicle becomes "Strip Vehicle." La Mesa
+    -- ox_target on the vehicle becomes "Strip Vehicle." La Mesa
     -- industrial — fits the "back-alley garage" aesthetic.
     zone = {
         center = vec3(720.84, -1080.05, 22.16),

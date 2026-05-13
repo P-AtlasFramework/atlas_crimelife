@@ -1,10 +1,10 @@
 -- atlas_crimelife / chopshop — client.
 --
--- Drive a stolen vehicle into the chop shop zone → atlas_target on the
+-- Drive a stolen vehicle into the chop shop zone → ox_target on the
 -- vehicle exposes "Strip Vehicle" → progress bar runs → server awards
 -- parts and deletes the car.
 --
--- Zone draws a floor marker so players see WHERE to park. atlas_target's
+-- Zone draws a floor marker so players see WHERE to park. ox_target's
 -- canInteract gates on (in-zone, vehicle is networked, vehicle isn't
 -- excluded class). Server runs the actual gameplay logic.
 
@@ -90,7 +90,7 @@ RegisterNetEvent('atlas_crimelife:cs:stripDone', function()
     stripping = false
 end)
 
--- ─── atlas_target option on the targeted vehicle ─────────────────
+-- ─── ox_target option on the targeted vehicle ─────────────────
 
 CreateThread(function()
     while GetResourceState('ox_target') ~= 'started' do Wait(250) end
