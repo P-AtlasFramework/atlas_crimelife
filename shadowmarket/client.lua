@@ -66,14 +66,14 @@ end
 -- ─── atlas_target wiring ─────────────────────────────────────────
 
 CreateThread(function()
-    while GetResourceState('atlas_target') ~= 'started' do Wait(250) end
+    while GetResourceState('ox_target') ~= 'started' do Wait(250) end
 
     -- Spawn handlers and register their target options.
     for idx, data in ipairs(config.handlers) do
         spawnHandler(idx, data)
         local ped = handlerEntities[idx]
         if ped then
-            exports['atlas_target']:addLocalEntity(ped, {
+            exports.ox_target:addLocalEntity(ped, {
                 {
                     name        = 'atlas_crimelife:sm:pickup_' .. idx,
                     label       = 'Pick up package',
@@ -100,7 +100,7 @@ RegisterNetEvent('atlas_crimelife:sm:pickupAck', function(dropIdx, dropData)
     local ped = spawnDrop(dropIdx, dropData)
     if ped then
         -- addLocalEntity takes (entity, options[]) positionally.
-        exports['atlas_target']:addLocalEntity(ped, {
+        exports.ox_target:addLocalEntity(ped, {
             {
                 name      = 'atlas_crimelife:sm:dropoff_' .. dropIdx,
                 label     = 'Hand over package',

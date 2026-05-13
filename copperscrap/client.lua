@@ -18,11 +18,11 @@ end
 -- ─── atlas_target wiring (props) ─────────────────────────────────
 
 CreateThread(function()
-    while GetResourceState('atlas_target') ~= 'started' do Wait(250) end
+    while GetResourceState('ox_target') ~= 'started' do Wait(250) end
 
     for groupKey, group in pairs(config.propGroups) do
         pcall(function()
-            exports['atlas_target']:AddTargetModel(group.models, {
+            exports.ox_target:AddTargetModel(group.models, {
                 options = {
                     {
                         name      = 'atlas_crimelife:cps:' .. groupKey,
@@ -97,7 +97,7 @@ local fencePed
 local fenceLoaded = false
 
 CreateThread(function()
-    while GetResourceState('atlas_target') ~= 'started' do Wait(250) end
+    while GetResourceState('ox_target') ~= 'started' do Wait(250) end
 
     local hash = GetHashKey(config.fence.ped)
     RequestModel(hash)
@@ -131,7 +131,7 @@ CreateThread(function()
 
     -- atlas_target option on the fence (entity, options[]) positional.
     pcall(function()
-        exports['atlas_target']:addLocalEntity(fencePed, {
+        exports.ox_target:addLocalEntity(fencePed, {
             {
                 name      = 'atlas_crimelife:cps:fence_sell',
                 label     = 'Sell scrap',

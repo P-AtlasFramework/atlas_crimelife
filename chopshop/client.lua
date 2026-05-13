@@ -93,9 +93,9 @@ end)
 -- ─── atlas_target option on the targeted vehicle ─────────────────
 
 CreateThread(function()
-    while GetResourceState('atlas_target') ~= 'started' do Wait(250) end
+    while GetResourceState('ox_target') ~= 'started' do Wait(250) end
 
-    exports['atlas_target']:addGlobalVehicle({
+    exports.ox_target:addGlobalVehicle({
         {
             name      = 'atlas_crimelife:cs:strip',
             label     = 'Strip Vehicle',

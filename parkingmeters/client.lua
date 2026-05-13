@@ -66,9 +66,9 @@ local function buildOptions()
 end
 
 CreateThread(function()
-    while GetResourceState('atlas_target') ~= 'started' do Wait(250) end
+    while GetResourceState('ox_target') ~= 'started' do Wait(250) end
     pcall(function()
-        exports['atlas_target']:AddTargetModel(config.targetModels, {
+        exports.ox_target:AddTargetModel(config.targetModels, {
             options  = buildOptions(),
             distance = 2.0,
         })
